@@ -1,153 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PROJECT: SOLDIERS WAR</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NolGaeMiTV - Portfolio</title>
+    <link rel="stylesheet" href="css/new_style.css">
 </head>
 <body>
-<header>
-<nav>
-<ul>
-<li><a href="#intro">Home</a></li>
-<li><a href="#about">About</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
-</nav>
-<nav>
-<ul>
-<li><a href="https://www.youtube.com/watch?v=qNmB_D_bcfo">A.I English Learning</a></li>
-</ul>
-</nav>
-</header>
-<main>
+    <div id="canvas-container"></div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#channels">Channels</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#staff">Staff</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<section id="project_table">
-<table>
-  <caption>Projects List: 프로젝트 목록</caption>
-  <tr>
-    <th>Number<br>번호</th>
-    <th>Title<br>프로젝트이름</th>
-    <th>Source<br>소스 코드</th>
-    <th>About<br>요약</th>
-    <th>ETC<br>실행 및 플렛폼</th>
-  </tr>
+    <main>
+        <section id="intro">
+            <h1>NolGaeMiTV</h1>
+            <p>Welcome to my portfolio. Discover my projects and channels.</p>
+        </section>
 
-  <tr>
-    <th>1</th>
-    <th>엑셀파일 변형 및 생성 프로그램</th>
-    <td><a href="https://github.com/githumfirst/IDcardsExcelAutomationGui?search=1">소스코드(source)</a></td>
-    <th>C#으로 작성하였으며 업무용도로 커스터마이징 가능 함</th>
-    <td><a href="https://www.youtube.com/watch?v=YBx_BvuQBzE&list=PL5o1u6HCZ9Gcrl6ICSThkPymqrs04vMZZ&index=16">소스 코드 설명 및 실행 영상</a></td>
-  </tr>
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="card-container">
+                <!-- Project cards will be injected here -->
+            </div>
+        </section>
 
-  <tr>
-    <td>2</td>
-    <th>로또 번호 자동 생성기</th>
-    <td><a href="https://github.com/githumfirst/lotteNumberGenerator">소스코드(source)</a></td>
-    <th>C#으로 작성</th>
-    <td><a href="https://www.youtube.com/watch?v=TMyqaxrhGaw&list=PL5o1u6HCZ9Gcrl6ICSThkPymqrs04vMZZ&index=7">소스 코드 설명 및 실행 영상</a></td>
-  </tr>
+        <section id="channels">
+            <h2>Channels</h2>
+            <div class="card-container">
+                <!-- Channel cards will be injected here -->
+            </div>
+        </section>
 
-  <tr>
-    <td>3</td>
-    <th>RFID 생성기</th>
-    <td>-</td>
-    <th>파이썬으로 작성</th>
-    <td><a href="https://www.youtube.com/watch?v=BmD-bos2jnY&list=PL5o1u6HCZ9Gcrl6ICSThkPymqrs04vMZZ&index=1">소스 코드 설명 및 실행 영상</a></td>
-  </tr>
+        <section id="staff">
+            <h2>Staff</h2>
+            <div class="card-container">
+                <!-- Staff cards will be injected here -->
+            </div>
+        </section>
 
-  <tr>
-    <td>4</td>
-    <th>인공지능 로또번호 생성기</th>
-    <td>-</td>
-    <th>파이썬 및 인공지능 머신러닝 사용하여 제작</th>
-    <td><a href="https://www.youtube.com/watch?v=7S8phpIRXew&list=PL5o1u6HCZ9Gcrl6ICSThkPymqrs04vMZZ&index=2&t=2s">소스 코드 설명 및 실행 영상</a></td>
-  </tr>
- 
-  <tr>
-    <td>5</td>
-    <td>미니 게임: floating</td>
-    <td>소스는 인터넷에서 퍼서 android용으로 수정함-지금은모바일에서만 됨<br> * 소스: https://www.w3schools.com/graphics/tryit.asp?filename=trygame_default_gravity</td>
-    <td>js로 제작</td>
-    <td><a href="https://multiplayer-demo-ac50d.web.app/">실행-firebase</a></td>
-  </tr>
- 
-  <tr>
-    <td>6</td>
-    <td>병정놀이 게임</td>
-    <td><a href="https://github.com/githumfirst/githumfirst.github.io?search=1">* 소스코드(source)-지금은pc에서만 됨<br>
-* openai chatgpt 3.5를 활용하여 만듦<br>
-* 어렸을적 한번쯤은 해봤던 병정놀이 게임을 웹에서 즐길 수 있게<br>
-* 설치하지 않고 바로 웹에서 할 수 있게 제작함</a></td>
-    <td>js로 제작</td>
-    <td><a href="https://githumfirst.github.io/">실행(PLAY)-git web Services<a/></td>
-  </tr>
+        <section id="about">
+            <h2>Future Project</h2>
+            <div class="about-container">
+                <h3>A new retro game is in development.</h3>
+                <p><strong>Frontend:</strong> React</p>
+                <p><strong>Backend:</strong> Node.js</p>
+                <p><strong>Real-time Communication:</strong> socket.io</p>
+            </div>
+        </section>
+    </main>
 
-<td>7</td>
-    <td>Monster Flight<br>몬스터 플라이트</td>
-    <td><a href="https://play.google.com/store/apps/details?id=com.nolgaemi.monster">플레이스토어에서 보기(in PlayStore)<br></td>
-    <td>unity로 제작</td>
-    <td><a href="https://youtube.com/shorts/YMnRnsPjmGs?si=doML47o6TM4u4CA4">실행 영상<a/><br>
-        <a href="https://www.youtube.com/watch?v=HExnuQS_bUg&t=6s">view in Youtube<a/></td>
-  </tr>
+    <footer>
+        <p>© Copyright 2023 NolGaeMiTV | Email: thetheskywalker@gmail.com</p>
+    </footer>
 
-</table>
-</section>
-
-<section id="channel_table">
-<table>
-  <caption>channel List: 프로젝트 채널</caption>
-  <tr>
-    <th>Number(번호)</th>
-    <th>Channel(프로젝트이름)</th>
-    <th>Go to the channel(프로젝트 가기)</th>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td>youtube</td>
-    <td><a href="https://www.youtube.com/channel/UCgvNj4Wieo0EszdQUwKhe4w">nolGaeMi:놀개미</a></td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>네이버 블로그</td>
-    <td><a href="https://blog.naver.com/checrealname">naver blog</a></td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>google blogger</td>
-    <td><a href="https://www.blogger.com/blog/posts/4241289837387021740?hl=en&tab=jj">nolGaeMi blogger</a></td>
-  </tr>
-</table>
-</section>
-<section id="staff">
-<div class="Container">
-<img src="Images/indexPicture.jpg" alt="display picture of Soldiers' War">
-<h2>🤩 Human Resources 🤩<h2>
-<h3>🤩 Chief Executive Officer: Jackie</h3>
-<h3>🤩 Chief Public Relation Officer: EunSuk Park</h3>
-<h3>🤩 Chief HRD Officer: JaeMo</h3>
-<h3>🤩 Chief Technical Manager: DakGu</h3>
-<h3>🤩 Software Engineer: Tommy</h3>
-</div> 
-</section>
-
-<section id="about">
-<div class="Container">
-<h2>☪️ 진행예정 Project ☪️</h2>
-<h3>☪️ 레트로 병정놀이 게임을 온라인으로 개발 예정 중입니다 </h3>
-<h3>☪️ 온라인에서 1:1 혹은 1:컴퓨터로 진행 합니다 </h3>
-<h3>☪️ Front End는 React  </h3>
-<h3>☪️ Back End는  Node.js  </h3>
-<h3>☪️ socket.io library 를 사용해서 서버와 클라이언트간의 실시간 통신을 합니다.  </h3>
-<p></p>
-</div>
-
-</main>
-<footer>
-<p>© Copyright 2023 NolGaeMiTV <br>
-Email ID: thetheskywalker@gmail.com</p>
-</footer>
+    <script src="js/three.min.js"></script>
+    <script src="js/new_main.js"></script>
 </body>
 </html>
