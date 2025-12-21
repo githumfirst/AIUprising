@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title> Human vs AI, The Ultimate War</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div>
+          <div class="titleLine">
+            <div class="title">Human vs AI, The Ultimate War</div>
+            <div id="turnTimer" class="turnTimer" aria-live="polite" aria-label="Turn timer"></div>
+            <div id="eventBar" class="eventBar" aria-live="polite"></div>
+            <div id="winRate" class="winRate" aria-label="Win rate" aria-live="polite"></div>
+          </div>
+</div>
+        <div class="btnbar">
+          <button id="btnNew">New Game</button>
+          
+        </div>
+      </div>
+      <div class="boardWrap">
+        <div id="board" class="board" aria-label="Game board"></div>
+      </div>
+    </div>
+
+    <aside class="card">
+      <div class="header">
+        <div>
+          <div class="title">Status</div>
+          
+        </div>
+      </div>
+      <div class="side">
+        <div class="status">
+          <div class="row"><span class="pill good">Who's Turn</span><span id="turnPill" class="pill">—</span></div>
+          <div class="row"><span class="pill">Last</span><span id="lastActorPill" class="pill">—</span></div>
+
+          <div class="row"><span class="pill">Your Units</span><span id="countH" class="pill good">0</span></div>
+          <div class="row"><span class="pill">Enemy Units</span><span id="countC" class="pill bad">0</span></div>
+        </div>
+
+        <!-- Rules moved to the middle; game log removed from the side panel -->
+        <div class="help">
+          <div><span class="kbd">Rules</span></div>
+          <ul>
+            <li>Win: capture the enemy <b>Flag</b> AND eliminate the enemy <b>VIP</b> (order doesn’t matter)</li>
+            <li><b>VIP</b>: cannot move backward (back & back-diagonal)</li>
+            <li><b>VIP</b>: loses to any unit in battle</li>
+            <li><b>Sniper</b>: defeats only <b>VIP</b> and <b>Star ranks</b>; loses to all others</li>
+            <li>All units: move 1 square to any of the 8 adjacent squares</li>
+            <li>Battle (collision): resolved by unit rules; winner occupies the square</li>
+          
+          
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Collision banner (1s) -->
+  <div id="battleBanner" class="battleBanner" aria-hidden="true">
+    <div class="battleBannerInner">
+      <div id="battleBannerTitle" class="battleBannerTitle">Boom!</div>
+      <div id="battleBannerSub" class="battleBannerSub">—</div>
+    </div>
+  </div>
+
+
+    <div id="cpuAttackOverlay" class="cpuAttackOverlay hidden" aria-hidden="true"></div>
+<div id="resultOverlay" class="overlay" aria-hidden="true">
+    <div class="overlayCard">
+      <div id="resultTitle" class="overlayTitle">YOU WIN!</div>
+      <div id="resultSub" class="overlaySub">Enemy VIP eliminated.</div>
+      <div class="overlayBtns">
+        <button id="btnPlayAgain">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script defer src="game.js"></script>
+</body>
+</html>
