@@ -1,12 +1,22 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> AI Uprising</title>
+  <title>K-Army Battle Game</title>
+  <link rel="stylesheet" href="tutorial.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+  <div id="landingScreen">
+    <div class="landingContent">
+      <h1 class="landingTitle">K-Army Battle Game</h1>
+      <p class="landingTagline">Master the Art of Deception</p>
+      <div class="landingLoader">Loading...</div>
+    </div>
+  </div>
   <div class="wrap">
     <div class="card">
       <div class="header">
@@ -17,12 +27,14 @@
             <div id="eventBar" class="eventBar" aria-live="polite"></div>
             <div id="winRate" class="winRate" aria-label="Win rate" aria-live="polite"></div>
           </div>
-</div>
+        </div>
         <div class="btnbar">
+          <button id="btnTutorial">Tutorial</button>
+          <button id="btnMute" aria-label="Toggle Sound">🔊</button>
           <button id="btnNew">New Game</button>
-          
         </div>
       </div>
+
       <div class="boardWrap">
         <div id="board" class="board" aria-label="Game board"></div>
       </div>
@@ -32,7 +44,7 @@
       <div class="header">
         <div>
           <div class="title">Status</div>
-          
+
         </div>
       </div>
       <div class="side">
@@ -45,20 +57,90 @@
         </div>
 
         <!-- Rules moved to the middle; game log removed from the side panel -->
-        <div class="help">
-          <div><span class="kbd">Rules</span></div>
-          <ul>
-            <li>Win: capture the enemy <b>Flag</b> AND eliminate the enemy <b>VIP</b> (order doesn’t matter)</li>
-            <li><b>VIP</b>: cannot move backward (back & back-diagonal)</li>
-            <li><b>VIP</b>: loses to any unit in battle</li>
-            <li><b>Sniper</b>: defeats only <b>VIP</b> and <b>Star ranks</b>; loses to all others</li>
-            <li>All units: move 1 square to any of the 8 adjacent squares</li>
-            <li>Battle (collision): resolved by unit rules; winner occupies the square</li>
-          
-          
+
+        <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:10px;">
+          <button id="btnToggleHelp" class="smBtn">Hide Guide</button>
+        </div>
+
+        <!-- Collapsible Content -->
+        <div id="helpContent" class="helpContent">
+
+          <div class="helperSection">
+            <div class="secTitle">Hierarchy (Winning Order)</div>
+            <!-- Diagrammatic Flow -->
+            <div class="rankFlow">
+              <div class="rfBlock stars">
+                <div class="rfIcon">★★★★</div>
+                <div class="rfLabel">Generals (Stars)</div>
+                <div class="rfDesc">Beats all below</div>
+              </div>
+              <div class="rfArrow">⬇</div>
+              <div class="rfBlock flowers">
+                <div class="rfIcon">✿✿✿</div>
+                <div class="rfLabel">Field Grade (Flowers)</div>
+                <div class="rfDesc">Beats Diamonds & below</div>
+              </div>
+              <div class="rfArrow">⬇</div>
+              <div class="rfBlock diamonds">
+                <div class="rfIcon">◆◆◆</div>
+                <div class="rfLabel">Company (Diamonds)</div>
+              </div>
+              <div class="rfArrow">⬇</div>
+              <div class="rfBlock chevrons">
+                <div class="rfIcon">❯❯❯</div>
+                <div class="rfLabel">NCO (Chevrons)</div>
+              </div>
+              <div class="rfArrow">⬇</div>
+              <div class="rfBlock lines">
+                <div class="rfIcon">══</div>
+                <div class="rfLabel">Soldiers (Lines)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="helperSection">
+            <div class="secTitle">Special Units</div>
+            <div class="specialCards compact">
+
+              <div class="spCard spSniper">
+                <div class="spHead">
+                  <span class="spIcon">🎯</span> <b>Sniper</b>
+                </div>
+                <div class="spBody">
+                  <div class="spRule win">Wins vs <b>Stars (★)</b> & <b>VIP</b></div>
+                  <div class="spRule lose">Loses to everyone else</div>
+                </div>
+              </div>
+
+              <div class="spCard spMP">
+                <div class="spHead">
+                  <span class="spIcon">👮</span> <b>Military Police</b>
+                </div>
+                <div class="spBody">
+                  <div class="spRule lose">Loses to everyone</div>
+                  <div class="spRule effect"><b>Scout:</b> Reveals enemy rank on hit</div>
+                </div>
+              </div>
+
+              <div class="spCard spVIP">
+                <div class="spHead">
+                  <span class="spIcon">👑</span> <b>President</b>
+                </div>
+                <div class="spBody">
+                  <div class="spRule lose">Loses to everyone</div>
+                  <div class="spRule goal">Protect at all costs!</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
-    </aside>
+
+  </div>
+
+  </div>
+  </aside>
   </div>
 
   <div id="toast" class="toast"></div>
@@ -72,8 +154,8 @@
   </div>
 
 
-    <div id="cpuAttackOverlay" class="cpuAttackOverlay hidden" aria-hidden="true"></div>
-<div id="resultOverlay" class="overlay" aria-hidden="true">
+  <div id="cpuAttackOverlay" class="cpuAttackOverlay hidden" aria-hidden="true"></div>
+  <div id="resultOverlay" class="overlay" aria-hidden="true">
     <div class="overlayCard">
       <div id="resultTitle" class="overlayTitle">YOU WIN!</div>
       <div id="resultSub" class="overlaySub">Enemy VIP eliminated.</div>
@@ -83,7 +165,29 @@
     </div>
   </div>
 
+  <div id="tutorialOverlay" class="tutorialOverlay" aria-hidden="true">
+    <div class="tutorialCard">
+      <div class="tutorialTop">
+        <div class="tutorialTitle">Tutorial</div>
+        <div class="tutorialBtns">
+          <!-- Skip button removed -->
+        </div>
+      </div>
 
+      <div id="tutorialStage" class="tutorialStage"></div>
+
+      <div class="tutorialFooter">
+        <label class="tutorialCheck">
+          <input id="chkTutorialDontShow" type="checkbox">
+          Don't show again
+        </label>
+        <button id="btnTutorialNext">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="tutorial.js"></script>
   <script defer src="game.js"></script>
 </body>
+
 </html>
