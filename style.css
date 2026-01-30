@@ -1230,6 +1230,16 @@ body.turn-cpu #turnPill {
   color: #ff4d4d;
 }
 
+/* Generic Text Insignia (for MP, Sniper, Pre) */
+.insText {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.1;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+}
+
 
 /* --- Flags: big, bright, trendy (no text) --- */
 .flag-wrap {

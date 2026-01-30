@@ -216,14 +216,12 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   // 계급장(간단 아이콘) 표시: 대통령/헌병만 텍스트
   function insigniaFor(rankId) {
     const spec = ((rankById[rankId] && rankById[rankId].special)) || null;
+    const isKo = (window.gameLang === 'ko');
     if (spec === 'PRES') {
-      // President uses Crown 👑 logic in pieceLabel via text, but here we can just return a fallback
-      // Actually pieceLabel handles PRES specifically, so this might not be reached for the top icon if we override it.
-      // But let's return a safe default.
-      return { kind: 'text', text: '👑' };
+      return { kind: 'text', text: isKo ? '대통령' : 'Pre' };
     }
     if (spec === 'MP') return { kind: 'text', text: 'MP' };
-    if (spec === 'ACC') return { kind: 'text', text: '🎯' }; // Sniper Target
+    if (spec === 'ACC') return { kind: 'text', text: isKo ? '저격수' : 'Sni' }; // Sniper Target
     if (spec === 'FLAG') return { kind: 'text', text: '⚑' };
 
     // 병: 노란 줄(1~4)
@@ -406,7 +404,7 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     const setTxt = (sel, txt) => { const el = document.querySelector(sel); if (el) el.innerText = txt; };
 
     setTxt('.status .row:nth-child(1) .pill.good', T.whoTurn);
-    setTxt('.status .row:nth-child(2) .pill:first-child', T.last);
+    // setTxt('.status .row:nth-child(2) .pill:first-child', T.last); // Last - Removed per user request
     setTxt('.status .row:nth-child(3) .pill:first-child', T.yourUnits);
     setTxt('.status .row:nth-child(4) .pill:first-child', T.enemyUnits);
 
@@ -779,7 +777,7 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   function setLastMove(from, to, side) {
     lastMove = { from, to, side, ts: Date.now() };
     lastActor = (side === HUMAN ? 'Human' : 'AI');
-    if (elLastActor) elLastActor.textContent = lastActor;
+    // if (elLastActor) elLastActor.textContent = lastActor; // Removed per user request
     if (elLastMove) elLastMove.textContent = `(${from.r + 1},${from.c + 1})→(${to.r + 1},${to.c + 1})`;
   }
 
@@ -1183,12 +1181,13 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     // Special handling for PRESIDENT
     if (p.rankId === 'PRES') {
       const isKo = (window.gameLang === 'ko');
-      // Always show Crown 👑 as the insignia
-      // Name: 'Pres.' / '대통령'
-      // On mobile: text is hidden via CSS (.small { display: none }), so we rely on the Insignia.
+      // Always show Crown 👑 as the insignia OR Text as requested
+      // User wanted: "President - Pre" (En), "President - 대통령" (Ko)
+      // pieceLabel name stays at bottom (hidden on mobile).
+      // Insignia becomes the text.
       return {
         hidden: false,
-        ins: { kind: 'text', text: '👑' },
+        ins: { kind: 'text', text: isKo ? '대통령' : 'Pre' },
         name: isKo ? '대통령' : 'Pres.'
       };
     }
