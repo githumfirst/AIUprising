@@ -246,6 +246,12 @@ button:disabled {
   font-weight: 650;
 }
 
+@media (max-width: 600px) {
+  .small {
+    display: none !important;
+  }
+}
+
 .selectRing::after {
   content: "";
   position: absolute;
@@ -1840,6 +1846,7 @@ body.turn-cpu #turnPill {
 .spRule.effect {
   color: #63b3ed;
 }
+
 /* --- Landing Screen --- */
 #landingScreen {
   position: fixed;
@@ -1881,7 +1888,7 @@ body.turn-cpu #turnPill {
   background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .landingTagline {
@@ -1890,7 +1897,7 @@ body.turn-cpu #turnPill {
   font-weight: 600;
   margin: 0 0 30px 0;
   letter-spacing: 1px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .landingLoader {
@@ -1902,18 +1909,35 @@ body.turn-cpu #turnPill {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 600px) {
-  .landingTitle { font-size: 2.2rem; }
-  .landingTagline { font-size: 1.1rem; }
-  .landingContent { padding: 30px 20px; width: 90%; }
+  .landingTitle {
+    font-size: 2.2rem;
+  }
+
+  .landingTagline {
+    font-size: 1.1rem;
+  }
+
+  .landingContent {
+    padding: 30px 20px;
+    width: 90%;
+  }
 }
 
 /* --- Mobile Rank Visibility Improvements --- */
 @media (max-width: 600px) {
+
   /* Allow insignias to use flexible width, preventing overflow */
   .insStripes,
   .insChevrons,
@@ -1923,7 +1947,8 @@ body.turn-cpu #turnPill {
     width: auto;
     max-width: 100%;
     margin: 0 auto;
-    gap: 1px; /* Reduce gap between icons */
+    gap: 1px;
+    /* Reduce gap between icons */
   }
 
   /* Flowers (Major/LTC/COL) */
@@ -1932,13 +1957,14 @@ body.turn-cpu #turnPill {
     width: clamp(8px, 12px, 2.5vmin);
     height: clamp(8px, 12px, 2.5vmin);
     border-width: 1px;
-    box-shadow: 0 1px 1px rgba(0,0,0,.3);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .3);
   }
-  
+
   .insFlowers {
     height: auto;
     min-height: 12px;
-    gap: 2px; /* tight gap */
+    gap: 2px;
+    /* tight gap */
   }
 
   /* Diamonds (Lieutenant/Captain) */
@@ -1946,19 +1972,21 @@ body.turn-cpu #turnPill {
     width: clamp(6px, 9px, 2.2vmin);
     height: clamp(6px, 9px, 2.2vmin);
     border-width: 1px;
-    box-shadow: none; /* simpler look for small items */
+    box-shadow: none;
+    /* simpler look for small items */
   }
-  
+
   .insDiamonds {
     height: auto;
     min-height: 10px;
-    gap: 2px; 
+    gap: 2px;
   }
 
   /* Stars (Generals) */
   .insStars {
     font-size: clamp(10px, 14px, 3.5vmin);
-    letter-spacing: -1px; /* tighter text */
+    letter-spacing: -1px;
+    /* tighter text */
     height: auto;
   }
 
@@ -1968,16 +1996,17 @@ body.turn-cpu #turnPill {
     min-height: 14px;
     gap: 1px;
   }
+
   .insChevrons .chev {
     width: clamp(14px, 24px, 6vmin);
     height: clamp(5px, 9px, 2vmin);
   }
-  
+
   /* Make the chevron lines proportionally thinner */
   .insChevrons .chev::before,
   .insChevrons .chev::after {
-     height: 2px;
-     width: clamp(8px, 12px, 3vmin); 
+    height: 2px;
+    width: clamp(8px, 12px, 3vmin);
   }
 
   /* Stripes (Enlisted) */
@@ -1986,35 +2015,47 @@ body.turn-cpu #turnPill {
     padding: 0;
     gap: 2px;
   }
+
   .insStripes .bar {
     height: 2px;
   }
 
   /* Piece padding & Layout adjustments */
   .piece {
-    padding: 2px 1px; /* very tight padding */
+    padding: 2px 1px;
+    /* very tight padding */
     gap: 0;
-    justify-content: center; 
+    justify-content: center;
   }
-  
+
   .insigniaWrap {
-    height: auto; /* let content define height */
+    height: auto;
+    /* let content define height */
     margin-bottom: 2px;
     padding: 1px 0;
-    flex-shrink: 0; 
+    flex-shrink: 0;
   }
-  
+
   /* Ensure text doesn't take too much space */
   .insText {
     font-size: clamp(9px, 12px, 3vmin);
     white-space: nowrap;
   }
-  
+
   /* Rank Name (bottom text) */
   .small {
-     font-size: clamp(8px, 10px, 2.5vmin);
-     margin-top: 0;
-     line-height: 1;
+    /* Hide standard rank names on mobile by default */
+    display: none;
+    font-size: clamp(8px, 10px, 2.5vmin);
+    margin-top: 0;
+    line-height: 1;
+  }
+
+  /* Force show text for special units */
+  /* Note: The JS adds .rank-pres, .rank-mp, .rank-acc classes to the .piece div */
+  .piece.rank-pres .small,
+  .piece.rank-mp .small,
+  .piece.rank-acc .small {
+    display: block;
   }
 }
-
