@@ -29,7 +29,6 @@
           </div>
         </div>
         <div class="btnbar">
-          <button id="btnLang">English</button>
           <button id="btnTutorial">Tutorial</button>
           <button id="btnMute" aria-label="Toggle Sound">🔊</button>
           <button id="btnNew">New Game</button>
@@ -44,26 +43,16 @@
     <aside class="card">
       <div class="header">
         <div>
-          <div class="title">Status</div>
-
+    <aside class="card">
+      <div class="header">
+        <div>
+          <div class="title">Rank Guide</div>
         </div>
       </div>
       <div class="side">
-        <div class="status">
-          <div class="row"><span class="pill good">Who's Turn</span><span id="turnPill" class="pill">—</span></div>
+        <!-- Status panel removed -->
 
-
-          <div class="row"><span class="pill">Your Units</span><span id="countH" class="pill good">0</span></div>
-          <div class="row"><span class="pill">Enemy Units</span><span id="countC" class="pill bad">0</span></div>
-        </div>
-
-        <!-- Rules moved to the middle; game log removed from the side panel -->
-
-        <div style="display:flex; justify-content:flex-end; align-items:center; margin-bottom:10px;">
-          <button id="btnToggleHelp" class="smBtn">Hide Guide</button>
-        </div>
-
-        <!-- Collapsible Content -->
+        <!-- Collapsible Content (Now always visible) -->
         <div id="helpContent" class="helpContent">
 
           <div class="helperSection">

@@ -18,10 +18,6 @@ const FLAG_SVG = {
       </svg>
     </span>`
 };
-
-// --- Localization State ---
-window.gameLang = 'en'; // Default to English 'en' or 'ko'
-
 (() => {
   // ---------- Data ----------
   const ROWS = 8;
@@ -185,30 +181,30 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
    */
   const RANKS = [
 
-    { id: 'FLAG', name: '', nameKo: '', power: 0, special: 'FLAG' },
-    { id: 'E2', name: 'PVT', nameKo: '이병', power: 1 },
-    { id: 'E1', name: 'PFC', nameKo: '일병', power: 2 },
-    { id: 'S3', name: 'SPC', nameKo: '상병', power: 3 },
-    { id: 'CPL', name: 'CPL', nameKo: '병장', power: 4 },
-    { id: 'SGT', name: 'SGT', nameKo: '하사', power: 5 },
-    { id: 'SSG', name: 'SSG', nameKo: '중사', power: 6 },
-    { id: 'SFC', name: 'SFC', nameKo: '상사', power: 7 },
+    { id: 'FLAG', name: '', power: 0, special: 'FLAG' },
+    { id: 'E2', name: 'PVT', power: 1 },
+    { id: 'E1', name: 'PFC', power: 2 },
+    { id: 'S3', name: 'SPC', power: 3 },
+    { id: 'CPL', name: 'CPL', power: 4 },
+    { id: 'SGT', name: 'SGT', power: 5 },
+    { id: 'SSG', name: 'SSG', power: 6 },
+    { id: 'SFC', name: 'SFC', power: 7 },
     // 원사 제거
-    { id: '2LT', name: '2LT', nameKo: '소위', power: 9 },
-    { id: '1LT', name: '1LT', nameKo: '중위', power: 10 },
-    { id: 'CPT', name: 'CPT', nameKo: '대위', power: 11 },
-    { id: 'MAJ', name: 'MAJ', nameKo: '소령', power: 12 },
-    { id: 'LTC', name: 'LTC', nameKo: '중령', power: 13 },
-    { id: 'COL', name: 'COL', nameKo: '대령', power: 14 },
-    { id: 'BG', name: 'BG', nameKo: '준장', power: 15 },
-    { id: 'MG', name: 'MG', nameKo: '소장', power: 16 },
-    { id: 'LTG', name: 'LTG', nameKo: '중장', power: 17 },
-    { id: 'GEN', name: 'GEN', nameKo: '대장', power: 18 },
+    { id: '2LT', name: '2LT', power: 9 },
+    { id: '1LT', name: '1LT', power: 10 },
+    { id: 'CPT', name: 'CPT', power: 11 },
+    { id: 'MAJ', name: 'MAJ', power: 12 },
+    { id: 'LTC', name: 'LTC', power: 13 },
+    { id: 'COL', name: 'COL', power: 14 },
+    { id: 'BG', name: 'BG', power: 15 },
+    { id: 'MG', name: 'MG', power: 16 },
+    { id: 'LTG', name: 'LTG', power: 17 },
+    { id: 'GEN', name: 'GEN', power: 18 },
 
     // 특수
-    { id: 'ACC', name: 'Sniper', nameKo: '저격수', power: 0, special: 'ACC', ins: { kind: 'badge', lines: 3 } },
-    { id: 'PRES', name: 'President', nameKo: '대통령', power: 99, special: 'PRES' },
-    { id: 'MP', name: 'MP', nameKo: 'MP', power: 98, special: 'MP' },
+    { id: 'ACC', name: 'Sniper', power: 0, special: 'ACC', ins: { kind: 'badge', lines: 3 } },
+    { id: 'PRES', name: 'President', power: 99, special: 'PRES' },
+    { id: 'MP', name: 'MP', power: 98, special: 'MP' },
   ];
 
   const rankById = Object.fromEntries(RANKS.map(r => [r.id, r]));
@@ -216,14 +212,8 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   // 계급장(간단 아이콘) 표시: 대통령/헌병만 텍스트
   function insigniaFor(rankId) {
     const spec = ((rankById[rankId] && rankById[rankId].special)) || null;
-    const isKo = (window.gameLang === 'ko');
-    if (spec === 'PRES') {
-      return { kind: 'text', text: isKo ? '대통령' : 'Pre' };
-    }
-    if (spec === 'MP') return { kind: 'text', text: 'MP' };
-    if (spec === 'ACC') return { kind: 'text', text: isKo ? '저격수' : 'Sni' }; // Sniper Target
-    if (spec === 'FLAG') return { kind: 'text', text: '⚑' };
-
+    if (spec === 'PRES') return { kind: 'text', text: 'PRES' };
+    if (spec === 'MP') return { kind: 'text', text: 'MP' }; if (spec === 'FLAG') return { kind: 'text', text: '⚑' };
     // 병: 노란 줄(1~4)
     const stripes = { 'E2': 1, 'E1': 2, 'S3': 3, 'CPL': 4 };
     if (stripes[rankId]) return { kind: 'stripes', n: stripes[rankId] };
@@ -262,16 +252,11 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   let gameHasStarted = false; // Tracks if a game is currently active
 
   const elBoard = document.getElementById('board');
-  const elTurnPill = document.getElementById('turnPill');
   const elTurnTimer = document.getElementById('turnTimer');
   const elCpuOverlay = document.getElementById('cpuAttackOverlay');
-  const elCountH = document.getElementById('countH');
-  const elCountC = document.getElementById('countC');
   const elToast = document.getElementById('toast');
   const elEventBar = document.getElementById('eventBar');
   const elWinRate = document.getElementById('winRate');
-  const elLastActor = document.getElementById('lastActorPill');
-  const elLastMove = document.getElementById('lastMovePill');
 
   const elBattleBanner = document.getElementById('battleBanner');
   const elBattleBannerTitle = document.getElementById('battleBannerTitle');
@@ -302,169 +287,7 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     });
   }
 
-
-
-  // --- Language Toggle ---
-  const elBtnLang = document.getElementById('btnLang');
-  if (elBtnLang) {
-    elBtnLang.addEventListener('click', () => {
-      window.gameLang = (window.gameLang === 'en' ? 'ko' : 'en');
-      updateLanguageUI();
-      render();
-    });
-  }
-
-  function updateLanguageUI() {
-    if (!elBtnLang) return;
-    // Button Text: Show what it IS, or what it WILL BE? Usually "English" / "한국어"
-    elBtnLang.textContent = (window.gameLang === 'en' ? '한국어' : 'English');
-
-    // Also update the rest of the text
-    if (typeof updateGameText === 'function') updateGameText();
-  }
-
-  const I18N = {
-    en: {
-      'status': 'Status',
-      'statusT': 'Status',
-      'tutorialT': 'Tutorial',
-      'whoTurn': "Who's Turn",
-      'yourTurn': 'Your Turn',
-      'aiTurn': 'AI Turn',
-      'last': 'Last',
-      'yourUnits': 'Your Units',
-      'enemyUnits': 'Enemy Units',
-      'showGuide': 'Show Guide',
-      'hideGuide': 'Hide Guide',
-      'hierarchy': 'HIERARCHY (WINNING ORDER)',
-      'generals': 'Generals',
-      'beatsAll': 'Beats all below',
-      'fieldGrade': 'Field Grade',
-      'beatsDia': 'Beats Diamonds & below',
-      'company': 'Company (Diamonds)',
-      'nco': 'NCO (Chevrons)',
-      'lines': 'Soldiers (Lines)',
-      'special': 'SPECIAL UNITS',
-      'sniper': 'Sniper',
-      'winsStars': 'Wins vs Stars (★) & VIP',
-      'losesAll': 'Loses to everyone else',
-      'mp': 'Military Police',
-      'losesAllMp': 'Loses to everyone...',
-      'scout': 'Scout: Reveals enemy rank on hit',
-      'pres': 'President',
-      'losesEveryone': 'Loses to everyone',
-      'goal': 'Goal: Protect / Enemy Goal: Kill',
-      'victory': 'Victory!',
-      'defeat': 'Defeat...',
-      'allElim': 'All your units were eliminated.',
-      'flagElim': 'Your flag or President were captured.',
-      'draw': 'Draw (Turn limit)'
-    },
-    ko: {
-      'status': '현황',
-      'statusT': '현황',
-      'tutorialT': '튜토리얼',
-      'whoTurn': '차례',
-      'yourTurn': '내 차례',
-      'aiTurn': 'AI 차례',
-      'last': '최근 행동',
-      'yourUnits': '아군 생존',
-      'enemyUnits': '적군 생존',
-      'showGuide': '가이드 보기',
-      'hideGuide': '가이드 숨기기',
-      'hierarchy': '계급 서열 (상성)',
-      'generals': '장군 (별)',
-      'beatsAll': '아래 모든 계급 승리',
-      'fieldGrade': '영관급 (말똥)',
-      'beatsDia': '위관급 이하 승리',
-      'company': '위관급 (다이아)',
-      'nco': '부사관 (갈매기)',
-      'lines': '병사 (작대기/병장)',
-      'special': '특수 유닛',
-      'sniper': '저격수 (Sniper)',
-      'winsStars': '<b>장군(별)</b> 및 <b>VIP</b> 처치',
-      'losesAll': '그 외 모든 계급에 패배',
-      'mp': '헌병 (MP)',
-      'losesAllMp': '모든 계급에 패배하지만...',
-      'scout': '<b>정찰:</b> 교전 시 적 계급 확인',
-      'pres': '대통령 (VIP)',
-      'losesEveryone': '누구에게나 잡힘',
-      'goal': '목표: 생존 (적 목표: 암살)',
-      'victory': '승리!',
-      'defeat': '패배...',
-      'allElim': '모든 부대가 전멸했습니다.',
-      'flagElim': '국기 또는 대통령이 잡혔습니다.',
-      'draw': '무승부 (턴 제한)'
-    }
-  };
-
-  function updateGameText() {
-    const T = I18N[window.gameLang];
-    const setHtml = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
-    const setTxt = (sel, txt) => { const el = document.querySelector(sel); if (el) el.innerText = txt; };
-
-    setTxt('.status .row:nth-child(1) .pill.good', T.whoTurn);
-    // setTxt('.status .row:nth-child(2) .pill:first-child', T.last); // Last - Removed per user request
-    setTxt('.status .row:nth-child(3) .pill:first-child', T.yourUnits);
-    setTxt('.status .row:nth-child(4) .pill:first-child', T.enemyUnits);
-
-    const btnHelp = document.getElementById('btnToggleHelp');
-    if (btnHelp) {
-      const isHidden = document.getElementById('helpContent').classList.contains('hidden');
-      btnHelp.innerText = isHidden ? T.showGuide : T.hideGuide;
-    }
-
-    setTxt('.helperSection .secTitle', T.hierarchy);
-    setTxt('.rfBlock.stars .rfLabel', T.generals);
-    setTxt('.rfBlock.stars .rfDesc', T.beatsAll);
-    setTxt('.rfBlock.flowers .rfLabel', T.fieldGrade);
-    setTxt('.rfBlock.flowers .rfDesc', T.beatsDia);
-    setTxt('.rfBlock.diamonds .rfLabel', T.company);
-    setTxt('.rfBlock.chevrons .rfLabel', T.nco);
-    setTxt('.rfBlock.lines .rfLabel', T.lines);
-
-    const secTitles = document.querySelectorAll('.helperSection .secTitle');
-    if (secTitles.length > 1) secTitles[1].innerText = T.special;
-
-    // Sniper
-    setHtml('.spCard.spSniper .spHead b', T.sniper);
-    setHtml('.spCard.spSniper .spRule.win', T.winsStars);
-    setHtml('.spCard.spSniper .spRule.lose', T.losesAll);
-
-    // MP
-    setHtml('.spCard.spMP .spHead b', T.mp);
-    setHtml('.spCard.spMP .spRule.lose', T.losesAllMp);
-    setHtml('.spCard.spMP .spRule.effect', T.scout);
-
-    // President
-    setHtml('.spCard.spVIP .spHead b', T.pres);
-    setHtml('.spCard.spVIP .spRule.lose', T.losesEveryone);
-    setHtml('.spCard.spVIP .spRule.goal', T.goal);
-
-    // Sidebar Title
-    const headers = document.querySelectorAll('aside.card .header .title');
-    for (const h of headers) h.innerText = T.status;
-  }
-
-  // Initial Sync
-  updateGameText();
-  updateLanguageUI();
-
-  // --- Help Toggle ---
-  const btnToggleHelp = document.getElementById('btnToggleHelp');
-  const helpContent = document.getElementById('helpContent');
-  if (btnToggleHelp && helpContent) {
-    btnToggleHelp.addEventListener('click', () => {
-      const isHidden = helpContent.classList.contains('hidden');
-      if (isHidden) {
-        helpContent.classList.remove('hidden');
-        btnToggleHelp.textContent = 'Hide Guide';
-      } else {
-        helpContent.classList.add('hidden');
-        btnToggleHelp.textContent = 'Show Guide';
-      }
-    });
-  }
+  // --- Help Toggle Removed (Always Visible) ---
 
   // ---------- Helpers ----------
   const inBounds = (r, c) => r >= 0 && r < ROWS && c >= 0 && c < COLS;
@@ -744,18 +567,6 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     elOverlay.setAttribute('aria-hidden', 'true');
   }
 
-  function countPieces() {
-    // h is the number of human's pieces, c is ai's pieces
-    let h = 0, c = 0;
-    for (let r = 0; r < ROWS; r++) for (let col = 0; col < COLS; col++) {
-      const p = board[r][col];
-      if (!p) continue;
-      if (p.side === HUMAN) h++; else c++;
-    }
-    elCountH.textContent = h;
-    elCountC.textContent = c;
-  }
-
   function findPresident(side) {
     for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
       const p = board[r][c];
@@ -772,24 +583,16 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     return null;
   }
 
-
-
   function setLastMove(from, to, side) {
     lastMove = { from, to, side, ts: Date.now() };
     lastActor = (side === HUMAN ? 'Human' : 'AI');
-    // if (elLastActor) elLastActor.textContent = lastActor; // Removed per user request
-    if (elLastMove) elLastMove.textContent = `(${from.r + 1},${from.c + 1})→(${to.r + 1},${to.c + 1})`;
+    // elLastActor/elLastMove removed
   }
 
   function setTurn(next) {
     turn = next;
-    if (!elTurnPill) return;
-    if (turn === HUMAN) {
-      elTurnPill.textContent = 'Your Turn';
-    } else {
-      // 컴퓨터 순서일 때: "악마 공격중" (텍스트 '악마'는 쓰지 않고 아이콘으로 표현)
-      elTurnPill.innerHTML = `<span class="turnDevil devilIcon" aria-hidden="true"></span><span class="turnAttacking"> Attacking</span>`;
-    }
+    // elTurnPill logic removed
+
     // 중앙 오버레이(컴퓨터 공격중) 표시
     if (elCpuOverlay) {
       if (turn === CPU) {
@@ -1178,58 +981,29 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     if (!canSee) return { hidden: true, name: '' };
 
     const rk = rankById[p.rankId];
-    // Special handling for PRESIDENT
+    // Special handling for PRESIDENT: Show Crown icon + "Pres." text
     if (p.rankId === 'PRES') {
-      const isKo = (window.gameLang === 'ko');
-      // Always show Crown 👑 as the insignia OR Text as requested
-      // User wanted: "President - Pre" (En), "President - 대통령" (Ko)
-      // pieceLabel name stays at bottom (hidden on mobile).
-      // Insignia becomes the text.
       return {
         hidden: false,
-        ins: { kind: 'text', text: isKo ? '대통령' : 'Pre' },
-        name: isKo ? '대통령' : 'Pres.'
+        ins: { kind: 'text', text: '👑' },
+        name: 'Pres.'
       };
     }
 
-    let dispName = '';
-    const isKo = (window.gameLang === 'ko');
-
-    if (p.rankId === 'MP') {
-      dispName = 'MP';
-    } else if (p.rankId === 'ACC') {
-      dispName = isKo ? '저격수' : 'Sniper';
-    } else {
-      // Standard Ranks
-      if (rk) {
-        if (isKo) dispName = rk.nameKo || rk.name;
-        else dispName = rk.name;
-      }
-    }
-
-    // For MP and ACC, we use text-as-insignia or emoji-as-insignia
-    // MP -> 'MP'
-    // ACC -> '🎯'
-    // We do NOT want to suppress the insignia anymore.
-    // So we remove the 'noIns' check.
-    return { hidden: false, ins: insigniaFor(p.rankId), name: dispName };
+    const dispName = (p.rankId === 'MP') ? 'MP' : ((p.rankId === 'ACC') ? 'Sniper' : ((rk && rk.name) ? rk.name : ''));
+    const noIns = (p.rankId === 'MP' || p.rankId === 'ACC');
+    return { hidden: false, ins: noIns ? null : insigniaFor(p.rankId), name: dispName };
   }
 
   function render() {
-    elBoard.innerHTML = '';
-
-    // update Title based on Lang
-    const isKo = (window.gameLang === 'ko');
-    const elTitle = document.querySelector('.title'); // assuming class .title exists in HTML
-    if (elTitle) {
-      // "K-Army Battle Game" <-> "병정놀이 게임"
-      // Check if we are in "setup" or "game" mode? 
-      // Actually just set it. 
-      // But wait, the title might be "K-Army..." initially.
-      // Let's safe guard.
-      if (isKo) elTitle.innerText = "병정놀이 게임";
-      else elTitle.innerText = "K-Army Battle Game";
+    // 1. Calculate counts first for Badge display
+    let counts = { [HUMAN]: 0, [CPU]: 0 };
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const p = board[r][c];
+      if (p) counts[p.side]++;
     }
+
+    elBoard.innerHTML = '';
 
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
@@ -1252,7 +1026,7 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
           card.className = `piece ${p.side === HUMAN ? 'p-h' : 'p-c'}`;
           const lab = pieceLabel(p);
 
-          const spec = ((rankById[p.rankId] && rankById[p.rankId].special)) || null;
+          const spec = (rankById[p.rankId] && rankById[p.rankId].special) || null;
           // Make special pieces visually distinctive ONLY when the piece is actually visible (no info leak).
           if (!lab.hidden) {
             if (spec === 'PRES') card.classList.add('rank-pres'); if (spec === 'MP') card.classList.add('rank-mp');
@@ -1264,9 +1038,16 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
             ? ((p.side === HUMAN) ? FLAG_SVG.human('flag-human') : FLAG_SVG.ai('flag-ai'))
             : (lab.hidden ? '<div class="insEnemy" aria-label="Enemy piece (hidden)">😈</div>' : insigniaHTML(lab.ins));
 
+          // [Request] Add Unit Count Badge to Flag
+          let badgeHtml = '';
+          if (isFlag) {
+            badgeHtml = `<div class="flag-badge">${counts[p.side]}</div>`;
+          }
+
           card.innerHTML = `
             <div class="insigniaWrap">${topHtml}</div>
             <div class="small">${(typeof isFlag !== 'undefined' && isFlag) ? '' : (lab.hidden ? '' : lab.name)}</div>
+            ${badgeHtml}
           `;
           sq.appendChild(card);
 
@@ -1283,22 +1064,13 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
       }
     }
 
-    countPieces();
+    // countPieces(); // Removed as we calculate inside render now (and status panel is being removed)
     if (!gameOver) {
-      const isKo = (window.gameLang === 'ko');
-      elTurnPill.textContent = (turn === HUMAN
-        ? (isKo ? '내 차례' : 'Your Turn')
-        : (isKo ? 'AI 차례' : 'AI Turn'));
       document.body.classList.toggle('turn-human', turn === HUMAN);
       document.body.classList.toggle('turn-cpu', turn === CPU);
     }
     renderTurnTimer();
   }
-
-  window.updateLanguage = function (lang) {
-    window.gameLang = lang;
-    render();
-  };
 
   function clearSelection() {
     selected = null;
@@ -1351,12 +1123,17 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
     } else {
       // battle (show banner first, then resolve after ~1s)
       revealAfterBattle(from, to);
-      const result = battle(mover, dest);
-      const moverName = rankById[mover.rankId].name; // Note: Use English logic here internally or for logs?
-      // Actually logs might need localization too, but let's stick to what we touch.
-      // The user asked for "Korean Mode" -> Title & Pieces involved.
-      // Logs are in announceImportant... maybe later.
 
+      // --- [Request] Show enemy rank for ~2s during battle ---
+      const enemyPiece = (mover.side === CPU) ? mover : dest;
+      // We temporarily force reveal. We'll revert this in resolveBattle if it survives.
+      // (Note: if it's already permanently revealed by some other logic, we might need a separate flag,
+      // but simplistic toggle is fine for now as per requirements).
+      if (enemyPiece) enemyPiece.revealedForHuman = true;
+      // -------------------------------------------------------
+
+      const result = battle(mover, dest);
+      const moverName = rankById[mover.rankId].name;
       const destName = rankById[dest.rankId].name;
       showBattleBanner(from, to, mover, dest, result, 2000);
 
@@ -1522,6 +1299,15 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
       if (msgs.length) {
         for (const m of msgs) announceImportant(m);
       }
+
+      // --- [Request] Hide enemy rank again if it survived ---
+      // If the CPU won (either attacking or defending), its piece remains.
+      // We should hide it back unless some other rule keeps it revealed (but per request "show for 2s", we revert).
+      const survivor = (result === 'att') ? mover : (result === 'def' ? dest : null);
+      if (survivor && survivor.side === CPU) {
+        survivor.revealedForHuman = false;
+      }
+      // -----------------------------------------------------
 
       render();
       if (checkWin()) return;
@@ -1749,7 +1535,6 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   }
 
   // ---------- Start ----------
-  // newGame();  // ⛔ 자동 시작 제거
 
   // ✅ 외부(tutorial.js)에서 시작할 수 있도록 공개
   window.startGame = function () {
@@ -1796,6 +1581,10 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
   };
 
 
+  // ---------- Data Initialization ----------
+  // Initialize immediately (paused) so the board is visible behind the tutorial
+  newGame();
+  if (window.pauseGame) window.pauseGame();
 })();
 
 // ---------- Landing Screen Logic ----------
@@ -1835,7 +1624,199 @@ window.gameLang = 'en'; // Default to English 'en' or 'ko'
 })();
 
 
+// ---------- Language / I18n ----------
+(() => {
+  // 1. Translations Dictionary for Main Game
+  window.gameLang = 'en'; // Default
 
+  const I18N = {
+    en: {
+      'tutorialT': 'Tutorial / <span class="subH">Purpose: Capture Enemy Flag & President!</span>',
+      'hierarchy': 'HIERARCHY (WINNING ORDER)',
+      'generals': 'Generals',
+      'beatsAll': 'Beats all below',
+      'fieldGrade': 'Field Grade',
+      'beatsDia': 'Beats Diamonds & below',
+      'company': 'Company (Diamonds)',
+      'nco': 'NCO (Chevrons)',
+      'lines': 'Soldiers (Lines)',
+      'special': 'SPECIAL UNITS',
+      'sniper': 'Sniper',
+      'winsStars': 'Wins vs Stars (★) & VIP',
+      'losesAll': 'Loses to everyone else',
+      'mp': 'Military Police',
+      'losesAllMp': 'Loses to everyone...',
+      'scout': 'Scout: Reveals enemy rank on hit',
+      'pres': 'President',
+      'losesEveryone': 'Loses to everyone',
+      'goal': 'Goal: Protect / Enemy Goal: Kill',
+      'victory': 'Victory!',
+      'defeat': 'Defeat...',
+      'allElim': 'All your units were eliminated.',
+      'flagElim': 'Your flag or President were captured.',
+      'draw': 'Draw (Turn limit)'
+    },
+    ko: {
+      'tutorialT': '튜토리얼 / <span class="subH">목표: 적의 깃발과 대통령을 체포하라!</span>',
+      'hierarchy': '계급 서열 (상성)',
+      'generals': '장군 (별)',
+      'beatsAll': '아래 모든 계급 승리',
+      'fieldGrade': '영관급 (말똥)',
+      'beatsDia': '위관급 이하 승리',
+      'company': '위관급 (다이아)',
+      'nco': '부사관 (갈매기)',
+      'lines': '병사 (작대기/병장)',
+      'special': '특수 유닛',
+      'sniper': '저격수 (Sniper)',
+      'winsStars': '<b>장군(별)</b> 및 <b>VIP</b> 처치',
+      'losesAll': '그 외 모든 계급에 패배',
+      'mp': '헌병 (MP)',
+      'losesAllMp': '모든 계급에 패배하지만...',
+      'scout': '<b>정찰:</b> 교전 시 적 계급 확인',
+      'pres': '대통령 (VIP)',
+      'losesEveryone': '누구에게나 잡힘',
+      'goal': '목표: 생존 (적 목표: 암살)',
+      'victory': '승리!',
+      'defeat': '패배...',
+      'allElim': '모든 부대가 전멸했습니다.',
+      'flagElim': '국기 또는 대통령이 잡혔습니다.',
+      'draw': '무승부 (턴 제한)'
+    }
+  };
+
+  function updateGameText() {
+    const T = I18N[window.gameLang];
+
+    const setHtml = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
+    const setTxt = (sel, txt) => { const el = document.querySelector(sel); if (el) el.innerText = txt; };
+
+    setTxt('.helperSection .secTitle', T.hierarchy);
+    setTxt('.rfBlock.stars .rfLabel', T.generals);
+    setTxt('.rfBlock.stars .rfDesc', T.beatsAll);
+    setTxt('.rfBlock.flowers .rfLabel', T.fieldGrade);
+    setTxt('.rfBlock.flowers .rfDesc', T.beatsDia);
+    setTxt('.rfBlock.diamonds .rfLabel', T.company);
+    setTxt('.rfBlock.chevrons .rfLabel', T.nco);
+
+    setTxt('.rfBlock.lines .rfLabel', T.lines);
+
+    const secTitles = document.querySelectorAll('.helperSection .secTitle');
+    if (secTitles.length > 1) secTitles[1].innerText = T.special;
+
+    // Sniper
+    setHtml('.spCard.spSniper .spHead b', T.sniper);
+    setHtml('.spCard.spSniper .spRule.win', T.winsStars);
+    setHtml('.spCard.spSniper .spRule.lose', T.losesAll);
+
+    // MP
+    setHtml('.spCard.spMP .spHead b', T.mp);
+    setHtml('.spCard.spMP .spRule.lose', T.losesAllMp);
+    setHtml('.spCard.spMP .spRule.effect', T.scout);
+
+    // President
+    setHtml('.spCard.spVIP .spHead b', T.pres);
+    setHtml('.spCard.spVIP .spRule.lose', T.losesEveryone);
+    setHtml('.spCard.spVIP .spRule.goal', T.goal);
+
+    // Status Header (Sidebar Title) use statusT -> Rank Guide (Korean)
+    const headers = document.querySelectorAll('aside.card .header .title');
+    for (const h of headers) h.innerHTML = (window.gameLang === 'ko') ? '계급 가이드' : 'Rank Guide';
+
+    // Tutorial Header (Modal Title) use tutorialT
+    const tutHeaders = document.querySelectorAll('.tutorialTitle');
+    for (const h of tutHeaders) h.innerHTML = T.tutorialT;
+  }
+
+  // 3. Global Language Switcher
+  window.setGameLanguage = function (lang) {
+    if (lang !== 'en' && lang !== 'ko') return;
+    window.gameLang = lang;
+
+    updateGameText();
+    if (window.updateTutorialLanguage) window.updateTutorialLanguage();
+    updateLangButtons();
+  };
+
+  function updateLangButtons() {
+    const btns = document.querySelectorAll('.btnLangToggle');
+    btns.forEach(b => {
+      // Logic: Show the *target* language or toggle label.
+      // User requested: "처음에 '한국어'라고 표시... 클릭하면 'en'으로 변경"
+      b.innerText = window.gameLang === 'en' ? '한국어' : 'EN';
+    });
+  }
+
+  // 4. Inject Buttons
+  function createLangButton(id, parentSelector, style = '', classes = '') {
+    if (document.getElementById(id)) return;
+    const btn = document.createElement('button');
+    btn.id = id;
+    btn.className = 'btnLangToggle ' + classes;
+    btn.innerText = '한국어'; // Initial since default is en
+    btn.style.cssText = style;
+    btn.onclick = () => {
+      const next = window.gameLang === 'en' ? 'ko' : 'en';
+      window.setGameLanguage(next);
+    };
+    const parent = document.querySelector(parentSelector);
+    if (parent) parent.prepend(btn);
+  }
+
+  // Helper to ensure DOM is ready
+  setTimeout(() => {
+    // Inject Styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+       .btnLangToggle {
+         cursor: pointer;
+         font-weight: bold;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+         transition: all 0.2s;
+       }
+       .btnLangToggle:hover {
+         transform: scale(1.05);
+         filter: brightness(1.2);
+       }
+       /* Sub Header Styling */
+       .subH {
+         font-size: 0.7em;
+         font-weight: normal;
+         color: #ffd700;
+         margin-left: 8px;
+         text-transform: none;
+         letter-spacing: normal;
+         opacity: 0.9;
+         white-space: nowrap;
+         overflow: hidden;
+         text-overflow: ellipsis;
+         display: inline-block;
+         vertical-align: middle;
+         max-width: 220px; /* Constrain width to prevent layout break */
+       }
+     `;
+    document.head.appendChild(style);
+
+    // Header Button
+    const headerRight = document.querySelector('.header > div:last-child');
+    if (headerRight) {
+      const btn = document.createElement('button');
+      btn.className = 'btnLangToggle smBtn'; // Re-use smBtn style
+      btn.style.marginRight = '10px';
+      btn.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)'; // Stylish purple
+      btn.style.border = 'none';
+      btn.style.color = 'white';
+      btn.innerText = '한국어';
+      btn.onclick = () => window.setGameLanguage(window.gameLang === 'en' ? 'ko' : 'en');
+      headerRight.prepend(btn);
+    }
+
+    // Tutorial logic moved entirely to tutorial.js
+  }, 200);
+
+  // Initial Sync
+  updateGameText();
+})();
 
 // Updated Game Active Check (Global override or addition to internal logic if needed)
 // Internal isGameActive logic:
