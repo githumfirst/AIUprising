@@ -141,6 +141,21 @@ button:disabled {
   cursor: not-allowed
 }
 
+#btnLang {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+#btnLang:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
 .ghost {
   background: transparent
 }
