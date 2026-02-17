@@ -20,15 +20,18 @@
   <div class="wrap">
     <div class="card">
       <div class="header">
-        <div>
-          <div class="titleLine">
-            <div class="title">K-Army Battle Game</div>
-            <div id="turnTimer" class="turnTimer" aria-live="polite" aria-label="Turn timer"></div>
-            <div id="eventBar" class="eventBar" aria-live="polite"></div>
-            <div id="winRate" class="winRate" aria-label="Win rate" aria-live="polite"></div>
-          </div>
+        <!-- Row 1: Title -->
+        <div class="headerRow1">
+          <div class="title">K-Army Battle Game</div>
         </div>
+        <!-- Row 2: Event Message (2x4 grid) -->
+        <div class="headerRow2">
+          <div id="eventBar" class="eventBar" aria-live="polite"></div>
+        </div>
+        <!-- Row 3: Timer + WinRate + Lang + Tutorial + Mute + New Game -->
         <div class="btnbar">
+          <div id="turnTimer" class="turnTimer" aria-live="polite" aria-label="Turn timer"></div>
+          <div id="winRate" class="winRate" aria-label="Win rate" aria-live="polite"></div>
           <button id="btnTutorial">Tutorial</button>
           <button id="btnMute" aria-label="Toggle Sound">🔊</button>
           <button id="btnNew">New Game</button>
@@ -40,9 +43,6 @@
       </div>
     </div>
 
-    <aside class="card">
-      <div class="header">
-        <div>
     <aside class="card">
       <div class="header">
         <div>

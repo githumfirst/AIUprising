@@ -52,7 +52,7 @@ body {
 /* ... existing styles ... */
 
 .side {
-  padding: 14px 14px 10px 14px;
+  padding: 6px 10px 4px 10px;
   flex: 1;
   /* Fill the card vertical space */
   display: flex;
@@ -62,7 +62,7 @@ body {
 }
 
 .helpContent {
-  margin-top: 15px;
+  margin-top: 6px;
   animation: slideDown 0.3s ease-out;
   /* max-height removed to allow filling space */
   flex: 1;
@@ -113,41 +113,83 @@ body {
   padding-right: 5px;
 }
 
+/* Header: Vertical Stack & Centered */
 .header {
-  padding: 14px 16px;
+  padding: 4px 8px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+  gap: 2px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .01));
   border-bottom: 1px solid var(--line);
-}
-
-.title {
-  font-weight: 800;
-  letter-spacing: -.2px;
+  text-align: center;
 }
 
 .titleLine {
   display: flex;
+  flex-direction: column;
+  width: 100%;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
+}
+
+/* Header Row 1: Title */
+.headerRow1 {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Header Row 2: Event Message + Win Rate */
+.headerRow2 {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Flashy, large title */
+.title {
+  font-weight: 900;
+  font-size: clamp(11px, 1.7vw, 19px);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+
+  /* Gradient text */
+  background: linear-gradient(90deg, #fff 0%, #a5b4fc 50%, #fff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(165, 180, 252, 0.4);
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .turnTimer {
-  padding: 8px 14px;
+  padding: 10px 20px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, .06);
+  background: rgba(0, 0, 0, .3);
   font-weight: 900;
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-  min-width: 70px;
+  font-size: 18px;
+  min-width: 90px;
   text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .turnTimer .timerIcon {
@@ -182,9 +224,12 @@ body.turn-cpu .turnTimer {
 
 .btnbar {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2px;
 }
 
 button {
@@ -471,7 +516,7 @@ button:disabled {
 .insStars,
 .insFlowers,
 .insDiamonds {
-  width: 56px;
+  width: clamp(28px, 5vmin, 56px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -479,7 +524,7 @@ button:disabled {
 }
 
 .insText {
-  max-width: 56px;
+  max-width: clamp(28px, 5vmin, 56px);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -523,7 +568,7 @@ button:disabled {
 
 .insigniaWrap {
   width: 100%;
-  height: clamp(14px, 2.6vmin, 20px);
+  height: clamp(10px, 2vmin, 20px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -544,23 +589,23 @@ button:disabled {
 }
 
 .insStars {
-  font-size: 14px;
+  font-size: clamp(8px, 1.5vmin, 14px);
   line-height: 1;
-  letter-spacing: 1px;
+  letter-spacing: clamp(0px, 0.3vmin, 1px);
 }
 
 .insStripes {
-  width: 44px;
-  height: 22px;
-  border-radius: 6px;
+  width: clamp(22px, 4vmin, 44px);
+  height: clamp(11px, 2vmin, 22px);
+  border-radius: clamp(3px, 0.6vmin, 6px);
   border: none;
   background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 3px 5px;
-  gap: 2px;
+  padding: clamp(1px, 0.3vmin, 3px) clamp(2px, 0.5vmin, 5px);
+  gap: clamp(1px, 0.2vmin, 2px);
 }
 
 .insStripes .hbar,
@@ -574,16 +619,16 @@ button:disabled {
 }
 
 .insChevrons {
-  height: 18px;
+  height: clamp(9px, 1.6vmin, 18px);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2px;
+  gap: clamp(1px, 0.2vmin, 2px);
 }
 
 .insChevrons .chev {
-  width: 26px;
-  height: 10px;
+  width: clamp(13px, 2.4vmin, 26px);
+  height: clamp(5px, 1vmin, 10px);
   position: relative;
 }
 
@@ -613,17 +658,17 @@ button:disabled {
 
 .insDiamonds {
   display: flex;
-  gap: 4px;
+  gap: clamp(2px, 0.4vmin, 4px);
   align-items: center;
   justify-content: center;
-  height: clamp(12px, 2.2vmin, 16px);
+  height: clamp(8px, 1.4vmin, 16px);
 }
 
 .dia {
-  width: 10px;
-  height: 10px;
+  width: clamp(5px, 1vmin, 10px);
+  height: clamp(5px, 1vmin, 10px);
   transform: rotate(45deg);
-  border-radius: 2px;
+  border-radius: clamp(1px, 0.2vmin, 2px);
   border: 1px solid rgba(255, 255, 255, .35);
   background: rgba(255, 255, 255, .75);
   box-shadow: 0 1px 0 rgba(0, 0, 0, .25);
@@ -655,7 +700,10 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, .42);
+  background: rgba(0, 0, 0, .6);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   opacity: 0;
   pointer-events: none;
   transition: opacity .22s ease;
@@ -667,16 +715,30 @@ button:disabled {
   pointer-events: auto;
 }
 
+/* Win state background */
+.overlay.win-state {
+  background-image: url('crazygameuploadData/YouWin.png');
+  background-color: rgba(0, 0, 0, .3);
+}
+
+/* Lose state background */
+.overlay.lose-state {
+  background-image: url('crazygameuploadData/YouLose.png');
+  background-color: rgba(0, 0, 0, .3);
+}
+
 .overlayCard {
   width: min(560px, 92vw);
   padding: 22px 18px;
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, .18);
-  background: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .10));
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(8px);
   box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
   text-align: center;
   transform: translateY(10px) scale(.98);
   transition: transform .22s ease;
+  margin-top: 180px;
 }
 
 .overlay.show .overlayCard {
@@ -684,29 +746,25 @@ button:disabled {
 }
 
 .overlayTitle {
-  font-size: 44px;
-  font-weight: 950;
-  letter-spacing: -1px;
-  line-height: 1.05;
-  text-transform: uppercase;
-  background: linear-gradient(90deg, rgba(61, 220, 151, 1), rgba(255, 204, 102, 1), rgba(120, 170, 255, 1));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 18px 40px rgba(0, 0, 0, .40);
+  font-size: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .overlayTitle.lose {
-  background: linear-gradient(90deg, rgba(255, 92, 92, 1), rgba(255, 204, 102, 1), rgba(255, 255, 255, .9));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .overlaySub {
-  margin-top: 10px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, .82);
+  margin-top: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .95);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .6);
 }
 
 .overlayBtns {
@@ -1556,32 +1614,29 @@ body.turn-cpu #turnPill {
   font-size: 13px;
 }
 
-/* === Important event bar (placed next to the turn timer) === */
+/* === Important event bar (2x4 grid layout) === */
 .eventBar {
-  /* keep header height stable */
-  height: 34px;
-  min-width: 0;
+  /* 2 rows x 4 columns grid */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 2px 6px;
 
-  flex: 1 1 auto;
+  min-width: 280px;
+  max-width: 480px;
+  padding: 2px 4px;
 
-  display: flex;
-  flex-direction: column-reverse;
-  /* newest on top */
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2px;
-
-  font-size: 12px;
-  font-weight: 950;
-  letter-spacing: .2px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1px;
   color: var(--warn);
-  text-shadow: 0 10px 24px rgba(0, 0, 0, .45);
+  text-shadow: 0 6px 16px rgba(0, 0, 0, .4);
 
-  /* 2-line view without layout jump */
   overflow: hidden;
-  white-space: normal;
+  white-space: nowrap;
 
-  opacity: 0.0;
+  /* Always visible */
+  opacity: 0.98;
   transition: opacity .18s ease;
 }
 
@@ -1594,7 +1649,8 @@ body.turn-cpu #turnPill {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  line-height: 1.05;
+  line-height: 1.15;
+  text-align: center;
 }
 
 .winRate {
@@ -2042,4 +2098,59 @@ body.turn-cpu #turnPill {
     padding: 30px 20px;
     width: 90%;
   }
+}
+
+/* === Rank Guide sidebar title - smaller size === */
+aside.card .header .title {
+  font-size: clamp(9px, 1.5vw, 12px);
+  letter-spacing: -0.25px;
+  margin-bottom: 0;
+}
+
+/* === Rank Guide - Reduce vertical spacing === */
+.helperSection {
+  margin-bottom: 6px;
+}
+
+.secTitle {
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+}
+
+.rankFlow {
+  gap: 2px;
+}
+
+.rfBlock {
+  padding: 4px 8px;
+  margin: 0;
+}
+
+.rfArrow {
+  margin: 1px 0;
+  font-size: 10px;
+}
+
+.specialCards {
+  gap: 4px;
+}
+
+.spCard {
+  padding: 4px 6px;
+  margin-bottom: 2px;
+}
+
+.spHead {
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+}
+
+.spBody {
+  gap: 1px;
+}
+
+.spRule {
+  padding: 1px 0;
+  margin: 0;
+  line-height: 1.2;
 }

@@ -207,6 +207,25 @@ const FLAG_SVG = {
     { id: 'MP', name: 'MP', power: 98, special: 'MP' },
   ];
 
+  const RANK_NAMES = {
+    en: {
+      'E2': 'PVT', 'E1': 'PFC', 'S3': 'SPC', 'CPL': 'CPL',
+      'SGT': 'SGT', 'SSG': 'SSG', 'SFC': 'SFC',
+      '2LT': '2LT', '1LT': '1LT', 'CPT': 'CPT',
+      'MAJ': 'MAJ', 'LTC': 'LTC', 'COL': 'COL',
+      'BG': 'BG', 'MG': 'MG', 'LTG': 'LTG', 'GEN': 'GEN',
+      'ACC': 'Sniper', 'PRES': 'Pres.', 'MP': 'MP'
+    },
+    ko: {
+      'E2': '이병', 'E1': '일병', 'S3': '상병', 'CPL': '병장',
+      'SGT': '하사', 'SSG': '중사', 'SFC': '상사',
+      '2LT': '소위', '1LT': '중위', 'CPT': '대위',
+      'MAJ': '소령', 'LTC': '중령', 'COL': '대령',
+      'BG': '준장', 'MG': '소장', 'LTG': '중장', 'GEN': '대장',
+      'ACC': '저격수', 'PRES': '대통령', 'MP': 'MP'
+    }
+  };
+
   const rankById = Object.fromEntries(RANKS.map(r => [r.id, r]));
 
   // 계급장(간단 아이콘) 표시: 대통령/헌병만 텍스트
@@ -388,17 +407,14 @@ const FLAG_SVG = {
 
   function renderTurnTimer() {
     if (!elTurnTimer) return;
-    if (gameOver || turn !== HUMAN) {
-      elTurnTimer.innerHTML = '';
-      elTurnTimer.classList.remove('danger');
-      return;
-    }
-    const danger = (turnTimerLeft <= 3);
+    // Always show timer, display 0 when game is over or it's CPU turn
+    const displayTime = (gameOver || turn !== HUMAN) ? 0 : turnTimerLeft;
+    const danger = (displayTime <= 3 && displayTime > 0);
     elTurnTimer.classList.toggle('danger', danger);
-    elTurnTimer.innerHTML = `<span class="timerIcon" aria-hidden="true">⏱</span><span class="timerNum ${danger ? 'danger' : ' '}"></span>`;
+    elTurnTimer.innerHTML = `<span class="timerIcon" aria-hidden="true">⏱</span><span class="timerNum ${danger ? 'danger' : ''}"></span>`;
     const numEl = elTurnTimer.querySelector('.timerNum');
     if (numEl) {
-      numEl.textContent = String(turnTimerLeft);
+      numEl.textContent = String(displayTime);
       numEl.classList.toggle('danger', danger);
     }
   }
@@ -408,7 +424,8 @@ const FLAG_SVG = {
       window.clearInterval(turnTimerInterval);
       turnTimerInterval = null;
     }
-    if (elTurnTimer) { elTurnTimer.innerHTML = ''; elTurnTimer.classList.remove('danger'); }
+    // Always show timer with 0, not empty
+    renderTurnTimer();
   }
 
   function startHumanTurnTimer() {
@@ -505,14 +522,70 @@ const FLAG_SVG = {
   }
 
   // Important announcements (top-left, under title)
+  function getDefaultEventMessage() {
+    return window.gameLang === 'ko' ? '중요 이벤트 없음' : 'No important events';
+  }
+
   function clearEventBar() {
     if (!elEventBar) return;
     elEventBar.innerHTML = '';
-    elEventBar.classList.remove('show');
+    // Always show default message instead of being empty
+    const row = document.createElement('div');
+    row.className = 'eventLogEntry eventDefault';
+    row.textContent = getDefaultEventMessage();
+    elEventBar.appendChild(row);
+    elEventBar.classList.add('show');
   }
+  window.clearEventBar = clearEventBar;
+
+  // Translation map for event messages
+  const eventTranslations = {
+    'Human President eliminated': '아군 대통령 제거됨',
+    'AI President eliminated': '적군 대통령 제거됨',
+    'Human Sniper eliminated': '아군 저격수 제거됨',
+    'AI Sniper eliminated': '적군 저격수 제거됨',
+    'Human MP eliminated': '아군 헌병 제거됨',
+    'AI MP eliminated': '적군 헌병 제거됨',
+    'Human Flag captured': '아군 깃발 제거됨',
+    'AI Flag captured': '적군 깃발 제거됨',
+    '아군 대통령 제거됨': 'Human President eliminated',
+    '적군 대통령 제거됨': 'AI President eliminated',
+    '아군 저격수 제거됨': 'Human Sniper eliminated',
+    '적군 저격수 제거됨': 'AI Sniper eliminated',
+    '아군 헌병 제거됨': 'Human MP eliminated',
+    '적군 헌병 제거됨': 'AI MP eliminated',
+    '아군 깃발 제거됨': 'Human Flag captured',
+    '적군 깃발 제거됨': 'AI Flag captured',
+    'No important events': '중요 이벤트 없음',
+    '중요 이벤트 없음': 'No important events'
+  };
+
+  function translateEventMessages() {
+    if (!elEventBar) return;
+    const isKo = (window.gameLang === 'ko');
+    const entries = elEventBar.querySelectorAll('.eventLogEntry');
+    entries.forEach(entry => {
+      const text = entry.textContent;
+      const translated = eventTranslations[text];
+      if (translated) {
+        // Only translate if it's in the wrong language
+        const isKoreanText = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text);
+        if ((isKo && !isKoreanText) || (!isKo && isKoreanText)) {
+          entry.textContent = translated;
+        }
+      }
+    });
+  }
+  window.translateEventMessages = translateEventMessages;
 
   function announceImportant(msg, ms = 2400) {
     if (!elEventBar) return;
+
+    // Remove the default "no events" message when real events arrive
+    const defaultEntry = elEventBar.querySelector('.eventDefault');
+    if (defaultEntry) {
+      defaultEntry.remove();
+    }
 
     // Turn the single-line event bar into a persistent, scrollable log.
     // Each call appends a new entry (old entries remain for reference).
@@ -557,13 +630,18 @@ const FLAG_SVG = {
 
     elResultSub.textContent = sub || (win ? 'Enemy President eliminated.' : (lose ? 'Your President was eliminated.' : 'Draw.'));
 
+    // Add background image state classes
+    elOverlay.classList.remove('win-state', 'lose-state');
+    if (win) elOverlay.classList.add('win-state');
+    else if (lose) elOverlay.classList.add('lose-state');
+
     elOverlay.classList.add('show');
     elOverlay.setAttribute('aria-hidden', 'false');
   }
 
   function hideOverlay() {
     if (!elOverlay) return;
-    elOverlay.classList.remove('show');
+    elOverlay.classList.remove('show', 'win-state', 'lose-state');
     elOverlay.setAttribute('aria-hidden', 'true');
   }
 
@@ -981,16 +1059,24 @@ const FLAG_SVG = {
     if (!canSee) return { hidden: true, name: '' };
 
     const rk = rankById[p.rankId];
-    // Special handling for PRESIDENT: Show Crown icon + "Pres." text
+    // Special handling for PRESIDENT: Show Crown icon + "Pres." text/localized
+    const currentLang = window.gameLang || 'en';
+    const langMap = RANK_NAMES[currentLang] || RANK_NAMES.en;
+
     if (p.rankId === 'PRES') {
       return {
         hidden: false,
         ins: { kind: 'text', text: '👑' },
-        name: 'Pres.'
+        name: langMap['PRES'] || 'Pres.'
       };
     }
 
-    const dispName = (p.rankId === 'MP') ? 'MP' : ((p.rankId === 'ACC') ? 'Sniper' : ((rk && rk.name) ? rk.name : ''));
+    let dispName = langMap[p.rankId];
+    if (!dispName) {
+      // Fallback to existing logic if not in map
+      dispName = (p.rankId === 'MP') ? 'MP' : ((p.rankId === 'ACC') ? 'Sniper' : ((rk && rk.name) ? rk.name : ''));
+    }
+
     const noIns = (p.rankId === 'MP' || p.rankId === 'ACC');
     return { hidden: false, ins: noIns ? null : insigniaFor(p.rankId), name: dispName };
   }
@@ -1286,12 +1372,20 @@ const FLAG_SVG = {
       if (result === 'def' || result === 'both') removed.push(mover);
 
       const msgs = [];
+      const isKo = (window.gameLang === 'ko');
       for (const rp of removed) {
         if (!rp) continue;
+        const side = rp.side === HUMAN
+          ? (isKo ? '아군' : 'Human')
+          : (isKo ? '적군' : 'AI');
         if (rp.rankId === 'PRES') {
-          msgs.push(`${rp.side === HUMAN ? 'Human' : 'AI'} President eliminated`);
+          msgs.push(isKo ? `${side} 대통령 제거됨` : `${side} President eliminated`);
         } else if (rp.rankId === 'ACC') {
-          msgs.push(`${rp.side === HUMAN ? 'Human' : 'AI'} Sniper eliminated`);
+          msgs.push(isKo ? `${side} 저격수 제거됨` : `${side} Sniper eliminated`);
+        } else if (rp.rankId === 'MP') {
+          msgs.push(isKo ? `${side} 헌병 제거됨` : `${side} MP eliminated`);
+        } else if (rp.rankId === 'FLAG') {
+          msgs.push(isKo ? `${side} 깃발 제거됨` : `${side} Flag captured`);
         }
       }
       // IMPORTANT: Show each event on its own line (never join into a single horizontal string).
@@ -1541,6 +1635,10 @@ const FLAG_SVG = {
     newGame();
   };
 
+  window.refreshGameView = function () {
+    render();
+  };
+
   // ✅ 튜토리얼/일시정지용
   window.pauseGame = function () {
     // 입력 막기
@@ -1631,6 +1729,7 @@ const FLAG_SVG = {
 
   const I18N = {
     en: {
+      'gameTitle': 'K-Army Battle Game',
       'tutorialT': 'Tutorial / <span class="subH">Purpose: Capture Enemy Flag & President!</span>',
       'hierarchy': 'HIERARCHY (WINNING ORDER)',
       'generals': 'Generals',
@@ -1657,6 +1756,7 @@ const FLAG_SVG = {
       'draw': 'Draw (Turn limit)'
     },
     ko: {
+      'gameTitle': '추억의 병정놀이 게임',
       'tutorialT': '튜토리얼 / <span class="subH">목표: 적의 깃발과 대통령을 체포하라!</span>',
       'hierarchy': '계급 서열 (상성)',
       'generals': '장군 (별)',
@@ -1690,6 +1790,9 @@ const FLAG_SVG = {
     const setHtml = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
     const setTxt = (sel, txt) => { const el = document.querySelector(sel); if (el) el.innerText = txt; };
 
+    // Update main title
+    setTxt('.card > .header .title', T.gameTitle);
+
     setTxt('.helperSection .secTitle', T.hierarchy);
     setTxt('.rfBlock.stars .rfLabel', T.generals);
     setTxt('.rfBlock.stars .rfDesc', T.beatsAll);
@@ -1722,6 +1825,12 @@ const FLAG_SVG = {
     const headers = document.querySelectorAll('aside.card .header .title');
     for (const h of headers) h.innerHTML = (window.gameLang === 'ko') ? '계급 가이드' : 'Rank Guide';
 
+    // Update event bar default message when language changes
+    const eventDefault = document.querySelector('.eventBar .eventDefault');
+    if (eventDefault) {
+      eventDefault.textContent = window.gameLang === 'ko' ? '중요 이벤트 없음' : 'No important events';
+    }
+
     // Tutorial Header (Modal Title) use tutorialT
     const tutHeaders = document.querySelectorAll('.tutorialTitle');
     for (const h of tutHeaders) h.innerHTML = T.tutorialT;
@@ -1734,7 +1843,11 @@ const FLAG_SVG = {
 
     updateGameText();
     if (window.updateTutorialLanguage) window.updateTutorialLanguage();
+    if (window.refreshGameView) window.refreshGameView();
     updateLangButtons();
+
+    // Translate existing event messages instead of clearing
+    if (window.translateEventMessages) window.translateEventMessages();
   };
 
   function updateLangButtons() {
@@ -1797,9 +1910,9 @@ const FLAG_SVG = {
      `;
     document.head.appendChild(style);
 
-    // Header Button
-    const headerRight = document.querySelector('.header > div:last-child');
-    if (headerRight) {
+    // Header Button - Insert after timer (which is the first child)
+    const btnbarEl = document.querySelector('.btnbar');
+    if (btnbarEl) {
       const btn = document.createElement('button');
       btn.className = 'btnLangToggle smBtn'; // Re-use smBtn style
       btn.style.marginRight = '10px';
@@ -1808,7 +1921,13 @@ const FLAG_SVG = {
       btn.style.color = 'white';
       btn.innerText = '한국어';
       btn.onclick = () => window.setGameLanguage(window.gameLang === 'en' ? 'ko' : 'en');
-      headerRight.prepend(btn);
+      // Insert after the timer (second position) instead of prepending
+      const timer = document.getElementById('turnTimer');
+      if (timer && timer.nextSibling) {
+        btnbarEl.insertBefore(btn, timer.nextSibling);
+      } else {
+        btnbarEl.prepend(btn);
+      }
     }
 
     // Tutorial logic moved entirely to tutorial.js
